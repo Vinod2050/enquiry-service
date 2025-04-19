@@ -30,7 +30,7 @@ public class Enquiry {
 	private String email;
 	private Long mobileNo;
 	private String panCardNumber;
-	//private Integer otp;
+	private Boolean isDeleted;
 	@CreationTimestamp
 	private LocalDate creationDate;
 	@UpdateTimestamp

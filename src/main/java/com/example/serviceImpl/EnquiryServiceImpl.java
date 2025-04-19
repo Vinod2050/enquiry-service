@@ -23,6 +23,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 			Enquiry enquiry = modelMapper.map(dto, Enquiry.class);
 
 			System.out.println(enquiry);
+			enquiry.setIsDeleted(false);
 			//enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
 			enquiryRepository.save(enquiry);
 			return "Enquiry Submited Successfully";
