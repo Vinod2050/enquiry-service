@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 @EnableDiscoveryClient
 @SpringBootApplication
 public class EnquiryServiceApplication {
+	
 	@Bean
 	public ModelMapper modelMapper() {
 		ModelMapper modelMapper = new ModelMapper();

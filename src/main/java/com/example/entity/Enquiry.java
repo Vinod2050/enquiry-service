@@ -31,6 +31,7 @@ public class Enquiry {
 	private Long mobileNo;
 	private String panCardNumber;
 	private Boolean isDeleted;
+	private String enquiryStatus;
 	@CreationTimestamp
 	private LocalDate creationDate;
 	@UpdateTimestamp

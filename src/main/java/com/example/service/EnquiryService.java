@@ -6,4 +6,6 @@ public interface EnquiryService {
 
 	String saveEnquiry(EnquiryDTO dto);
 
+	String saveStatus(Integer enquiryId, String status);
+
 }

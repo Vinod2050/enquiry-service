@@ -1,5 +1,7 @@
 package com.example.serviceImpl;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,19 @@ public class EnquiryServiceImpl implements EnquiryService {
 		} catch (NumberFormatException e) {
 			return "Invalid Mobile Number Format";
 		}
+	}
+		
+	@Override
+	public String saveStatus(Integer enquiryId, String status) {
+		 Optional<Enquiry> opt = enquiryRepository.findById(enquiryId);
+		    if (opt.isPresent()) {
+		        Enquiry enquiry = opt.get();
+		        enquiry.setEnquiryStatus(status);  
+		        enquiryRepository.save(enquiry);
+		        return "Enquiry status updated successfully.";
+		    } else {
+		        return "Enquiry not found.";
+		    }
 	}
 
 }
