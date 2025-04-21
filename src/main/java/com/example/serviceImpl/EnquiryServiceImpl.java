@@ -32,18 +32,9 @@ public class EnquiryServiceImpl implements EnquiryService {
 		try {
 			System.out.println(dto);
 			Enquiry enquiry = modelMapper.map(dto, Enquiry.class);
-
-			System.out.println(enquiry);
-
-			
+		        System.out.println(EnquiryStatus.REGISTERD);
 			enquiry.setIsDeleted(false);
-			// enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
-
-			enquiry.setIsDeleted(false);
-			//enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
-
-			// enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
-
+		         enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
 			enquiryRepository.save(enquiry);
 			return "Enquiry Submited Successfully";
 		} catch (NumberFormatException e) {
