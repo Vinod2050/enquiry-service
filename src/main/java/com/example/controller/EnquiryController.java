@@ -6,17 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+<<<<<<< Updated upstream
 import org.springframework.web.bind.annotation.PatchMapping;
+=======
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+>>>>>>> Stashed changes
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dto.EnquiryDTO;
 import com.example.service.EnquiryService;
-import org.springframework.web.bind.annotation.RequestBody; 
-
-
 
 @RestController
 @RequestMapping("/api/enquiry")
@@ -25,13 +28,31 @@ public class EnquiryController {
 
 	@Autowired
 	private EnquiryService enquiryService;
-	
+
 	@PostMapping("/save")
-	public ResponseEntity<String> saveEnquiry(@Valid @RequestBody EnquiryDTO dto){
-			
-		String result=enquiryService.saveEnquiry(dto);
-		   
-	     return new ResponseEntity <String>(result,HttpStatus.CREATED);
+	public ResponseEntity<String> saveEnquiry(@Valid @RequestBody EnquiryDTO dto) {
+
+		String result = enquiryService.saveEnquiry(dto);
+
+		return new ResponseEntity<String>(result, HttpStatus.CREATED);
+	}
+
+	@GetMapping(value = "/get/{enquiryID}")
+	public ResponseEntity<EnquiryDTO> getEnquiryById(Integer enquiryID) {
+		EnquiryDTO enquiry = enquiryService.getEnquiry(enquiryID);
+		if (enquiry != null) {
+			return new ResponseEntity<EnquiryDTO>(enquiry, HttpStatus.FOUND);
+		}
+
+		return new ResponseEntity<EnquiryDTO>(HttpStatus.NOT_FOUND);
+
+	}
+
+	@DeleteMapping(value = "/delete/{enquiryId}")
+	public ResponseEntity<String> deleteById(@PathVariable Integer enquiryId) {
+		String msg = enquiryService.deleteEnquriy(enquiryId);
+		return new ResponseEntity<String>(msg, HttpStatus.ACCEPTED);
+
 	}
 	
 	

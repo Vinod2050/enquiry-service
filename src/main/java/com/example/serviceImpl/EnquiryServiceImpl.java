@@ -13,6 +13,7 @@ import com.example.service.EnquiryService;
 
 @Service
 public class EnquiryServiceImpl implements EnquiryService {
+	
 	@Autowired
 	private EnquiryRepository enquiryRepository;
 	@Autowired
@@ -25,8 +26,9 @@ public class EnquiryServiceImpl implements EnquiryService {
 			Enquiry enquiry = modelMapper.map(dto, Enquiry.class);
 
 			System.out.println(enquiry);
+			
 			enquiry.setIsDeleted(false);
-			//enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
+			// enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
 			enquiryRepository.save(enquiry);
 			return "Enquiry Submited Successfully";
 		} catch (NumberFormatException e) {
@@ -45,6 +47,31 @@ public class EnquiryServiceImpl implements EnquiryService {
 		    } else {
 		        return "Enquiry not found.";
 		    }
+	}
+
+	@Override
+	public EnquiryDTO getEnquiry(Integer enquiryID) {
+		if (enquiryRepository.existsById(enquiryID)) {
+			
+			Enquiry enquiry = enquiryRepository.findById(enquiryID).get();
+			EnquiryDTO enquirydto = modelMapper.map(enquiry, EnquiryDTO.class);
+
+			return enquirydto;
+		}
+		return null;
+	}
+
+	@Override
+	public String deleteEnquriy(Integer enquiryId) {
+		Optional<Enquiry> enquiry = enquiryRepository.findById(enquiryId);
+		
+		if (enquiry.isPresent()) {
+			Enquiry getenquiry = enquiry.get();
+			getenquiry.setIsDeleted(true);
+			enquiryRepository.save(getenquiry);
+			return "Enquiry Deleted Successfully...!";
+		}
+		return "Enquiry Id Not Found....!";
 	}
 
 }
