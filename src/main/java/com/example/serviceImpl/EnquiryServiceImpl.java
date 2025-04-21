@@ -2,14 +2,22 @@ package com.example.serviceImpl;
 
 import java.util.Optional;
 
+import java.util.List;
+
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
 import com.example.dto.EnquiryDTO;
 import com.example.entity.Enquiry;
+import com.example.enums.EnquiryStatus;
 import com.example.repository.EnquiryRepository;
 import com.example.service.EnquiryService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 
 @Service
 public class EnquiryServiceImpl implements EnquiryService {
@@ -26,9 +34,16 @@ public class EnquiryServiceImpl implements EnquiryService {
 			Enquiry enquiry = modelMapper.map(dto, Enquiry.class);
 
 			System.out.println(enquiry);
+
 			
 			enquiry.setIsDeleted(false);
 			// enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
+
+			enquiry.setIsDeleted(false);
+			//enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
+
+			// enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
+
 			enquiryRepository.save(enquiry);
 			return "Enquiry Submited Successfully";
 		} catch (NumberFormatException e) {
@@ -50,6 +65,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 	}
 
 	@Override
+
 	public EnquiryDTO getEnquiry(Integer enquiryID) {
 		if (enquiryRepository.existsById(enquiryID)) {
 			
@@ -72,6 +88,29 @@ public class EnquiryServiceImpl implements EnquiryService {
 			return "Enquiry Deleted Successfully...!";
 		}
 		return "Enquiry Id Not Found....!";
+	}
+
+	public Page<EnquiryDTO>  getAllEnquiries(String firstName, String email, int page, int size, String sortBy) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy != null ? sortBy : "firstName"));
+
+		if (firstName != null && email != null) {
+			return enquiryRepository.findByFirstNameAndEmail(firstName, email, pageable)
+					.map(entity -> modelMapper.map(entity, EnquiryDTO.class));
+		} else if (firstName != null) {
+			return enquiryRepository.findByFirstName(firstName, pageable)
+					.map(entity -> modelMapper.map(entity, EnquiryDTO.class));
+		} else if (email != null) {
+			return enquiryRepository.findByEmail(email, pageable)
+					.map(entity -> modelMapper.map(entity, EnquiryDTO.class));
+		} else {
+			return enquiryRepository.findAll(pageable).map(entity -> modelMapper.map(entity, EnquiryDTO.class));
+		}
+	}
+	
+	@Override
+	public List<Enquiry> getEnquiriesById(EnquiryStatus status) {
+		
+		return enquiryRepository.findAllByStatus(status);
 	}
 
 }
