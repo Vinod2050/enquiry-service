@@ -8,9 +8,9 @@ import lombok.Data;
 
 @Data
 public class CibilDTO {
+
 	private Integer cibilScore;
-	@CreationTimestamp
-	private LocalDate cibilScoreDateTime;
 	private String status;
 	private String cibilRemark;
+
 }

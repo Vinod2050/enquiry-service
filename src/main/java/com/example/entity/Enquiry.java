@@ -1,7 +1,8 @@
 package com.example.entity;
 
 import java.time.LocalDate;
-import com.example.enums.EnquiryStatus;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,7 +14,7 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
+import com.example.enums.EnquiryStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,10 +36,12 @@ public class Enquiry {
 	private String panCardNumber;
 	private Boolean isDeleted;
 	@Enumerated(EnumType.STRING)
-	private EnquiryStatus status; 
+	private EnquiryStatus enquiryStatus;
 	@CreationTimestamp
+	@Column(updatable = false)
 	private LocalDate creationDate;
 	@UpdateTimestamp
+	@Column(insertable = false)
 	private LocalDate updationDate;
 	@OneToOne
 	private Cibil cibilScore;

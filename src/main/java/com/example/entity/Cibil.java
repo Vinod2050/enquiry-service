@@ -2,6 +2,7 @@ package com.example.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,8 +28,10 @@ public class Cibil {
 	private String status;
 	private String cibilRemark;
 	@CreationTimestamp
+	@Column(updatable = false)
 	private LocalDate creationDate;
 	@UpdateTimestamp
+	@Column(insertable = false)
 	private LocalDate updationDate;
 
 }

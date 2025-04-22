@@ -1,7 +1,6 @@
 package com.example.enums;
 
 public enum EnquiryStatus {
-    REGISTERED,
-    APPROVED,
-    REJECTED
+	
+	REGISTERED, APPROVED, REJECTED
 }
