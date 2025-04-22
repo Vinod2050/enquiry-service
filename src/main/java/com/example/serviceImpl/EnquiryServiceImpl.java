@@ -1,10 +1,9 @@
 package com.example.serviceImpl;
 
-<<<<<<< Updated upstream
 import java.util.Optional;
-=======
+
 import java.util.List;
->>>>>>> Stashed changes
+
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import org.springframework.data.domain.Sort;
 
 @Service
 public class EnquiryServiceImpl implements EnquiryService {
+	
 	@Autowired
 	private EnquiryRepository enquiryRepository;
 	@Autowired
@@ -32,14 +32,9 @@ public class EnquiryServiceImpl implements EnquiryService {
 		try {
 			System.out.println(dto);
 			Enquiry enquiry = modelMapper.map(dto, Enquiry.class);
-
-			System.out.println(enquiry);
-<<<<<<< Updated upstream
+		        System.out.println(EnquiryStatus.REGISTERD);
 			enquiry.setIsDeleted(false);
-			//enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
-=======
-			// enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
->>>>>>> Stashed changes
+		         enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
 			enquiryRepository.save(enquiry);
 			return "Enquiry Submited Successfully";
 		} catch (NumberFormatException e) {
@@ -61,6 +56,31 @@ public class EnquiryServiceImpl implements EnquiryService {
 	}
 
 	@Override
+
+	public EnquiryDTO getEnquiry(Integer enquiryID) {
+		if (enquiryRepository.existsById(enquiryID)) {
+			
+			Enquiry enquiry = enquiryRepository.findById(enquiryID).get();
+			EnquiryDTO enquirydto = modelMapper.map(enquiry, EnquiryDTO.class);
+
+			return enquirydto;
+		}
+		return null;
+	}
+
+	@Override
+	public String deleteEnquriy(Integer enquiryId) {
+		Optional<Enquiry> enquiry = enquiryRepository.findById(enquiryId);
+		
+		if (enquiry.isPresent()) {
+			Enquiry getenquiry = enquiry.get();
+			getenquiry.setIsDeleted(true);
+			enquiryRepository.save(getenquiry);
+			return "Enquiry Deleted Successfully...!";
+		}
+		return "Enquiry Id Not Found....!";
+	}
+
 	public Page<EnquiryDTO>  getAllEnquiries(String firstName, String email, int page, int size, String sortBy) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy != null ? sortBy : "firstName"));
 
@@ -83,4 +103,5 @@ public class EnquiryServiceImpl implements EnquiryService {
 		
 		return enquiryRepository.findAllByStatus(status);
 	}
+
 }

@@ -29,7 +29,7 @@ public class EnquiryDTO {
 	
 	@NotNull(message = "Mobile number must not be null")
 	@Digits(integer = 10, fraction = 0, message = "Mobile number must be 10 digits")
-	private Long mobileNo;
+	private String mobileNo;
 	
 	@NotBlank(message = "PAN card number is required")
 	@Pattern(regexp = "[A-Z]{5}[0-9]{4}[A-Z]{1}", message = "Invalid PAN card format")

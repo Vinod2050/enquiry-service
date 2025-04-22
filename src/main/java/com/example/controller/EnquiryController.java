@@ -9,11 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-<<<<<<< Updated upstream
+
 import org.springframework.web.bind.annotation.PatchMapping;
-=======
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import org.springframework.web.bind.annotation.GetMapping;
->>>>>>> Stashed changes
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,9 +42,25 @@ public class EnquiryController {
 		String result = enquiryService.saveEnquiry(dto);
 
 		return new ResponseEntity<String>(result, HttpStatus.CREATED);
+
 	}
-<<<<<<< Updated upstream
-	
+
+	@GetMapping(value = "/get/{enquiryID}")
+	public ResponseEntity<EnquiryDTO> getEnquiryById(Integer enquiryID) {
+		EnquiryDTO enquiry = enquiryService.getEnquiry(enquiryID);
+		if (enquiry != null) {
+			return new ResponseEntity<EnquiryDTO>(enquiry, HttpStatus.FOUND);
+		}
+
+		return new ResponseEntity<EnquiryDTO>(HttpStatus.NOT_FOUND);
+
+	}
+
+	@DeleteMapping(value = "/delete/{enquiryId}")
+	public ResponseEntity<String> deleteById(@PathVariable Integer enquiryId) {
+		String msg = enquiryService.deleteEnquriy(enquiryId);
+		return new ResponseEntity<String>(msg, HttpStatus.ACCEPTED);
+  }
 	
 	@PatchMapping("/update-enquiry-status/{enquiryId}/{status}")
 	public ResponseEntity<String> updateEnquiryStatus(@PathVariable Integer enquiryId, @PathVariable String status ){
@@ -51,7 +69,7 @@ public class EnquiryController {
 		
 	}
 }
-=======
+
 
 	@GetMapping(value = "/enquiries")
 	public List<EnquiryDTO> getEnquiries(@RequestParam(required = false) String firstName,
@@ -68,4 +86,4 @@ public class EnquiryController {
 	}
 
 }
->>>>>>> Stashed changes
+
