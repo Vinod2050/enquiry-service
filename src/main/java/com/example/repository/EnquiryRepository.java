@@ -14,7 +14,7 @@ import com.example.enums.EnquiryStatus;
 
 @Repository
 public interface EnquiryRepository extends JpaRepository<Enquiry, Integer> {
-	
+
 	Page<EnquiryDTO> findByFirstName(String firstName, Pageable pageable);
 
 	Page<EnquiryDTO> findByEmail(String email, Pageable pageable);

@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,14 +23,11 @@ public class Cibil {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer cibilId;
 	private Integer cibilScore;
-	private LocalDate cibilScoreDateTime;
 	private String status;
 	private String cibilRemark;
+	private Integer enquiryId;
 	@CreationTimestamp
 	@Column(updatable = false)
 	private LocalDate creationDate;
-	@UpdateTimestamp
-	@Column(insertable = false)
-	private LocalDate updationDate;
 
 }
