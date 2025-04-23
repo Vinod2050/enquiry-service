@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +29,7 @@ public class Cibil {
 	@CreationTimestamp
 	@Column(updatable = false)
 	private LocalDate creationDate;
+
 
 
 

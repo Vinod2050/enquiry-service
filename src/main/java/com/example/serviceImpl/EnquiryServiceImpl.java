@@ -1,12 +1,9 @@
 package com.example.serviceImpl;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.controller.EnquiryController;
 import com.example.dto.EnquiryDTO;
-
 import com.example.entity.Enquiry;
 import com.example.enums.EnquiryStatus;
 import com.example.exception.EnquiryIdNotFound;

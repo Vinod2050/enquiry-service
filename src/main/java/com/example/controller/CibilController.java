@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -29,6 +30,11 @@ public class CibilController {
 		return new ResponseEntity<String>(savedCibil, HttpStatus.CREATED);
 	}
 
-	
+//	@PatchMapping("/updateEnquiryCibil/{enquiryId}")
+//	public ResponseEntity<String> updateCibilDetails(@PathVariable Integer enquiryId, @RequestBody CibilDTO cibilDto) {
+//		String updatedCibilDetails = cibilService.updateCibilDetails(enquiryId, cibilDto);
+//		return new ResponseEntity<String>(updatedCibilDetails,HttpStatus.OK);
+//	}
+
 
 }

@@ -29,6 +29,7 @@ public class CibilServiceImpl implements CibilService {
 			Enquiry enquiry = enquiryRepository.findById(enquiryId).get();
 
 			Cibil generatedCibilDetails = CibilCalculator.evaluateCibilScore(enquiry);
+
 			generatedCibilDetails.setEnquiryId(enquiryId);
 
 			cibilRepository.save(generatedCibilDetails);
@@ -41,5 +42,31 @@ public class CibilServiceImpl implements CibilService {
 		}
 		return "no cibil details/enquiry found for enquiry id : " + enquiryId;
 	}
+
+
+//	@Override
+//	public String updateCibilDetails(Integer enquiryId, CibilDTO cibilDto) {
+//
+//		if (enquiryRepository.existsById(enquiryId)) {
+//
+//			Enquiry enquiry = enquiryRepository.findById(enquiryId).get();
+//
+//			Cibil cibilScore = enquiry.getCibilScore();
+//
+//			if (cibilDto.getCibilScore() != null) {
+//				cibilScore.setCibilScore(cibilDto.getCibilScore());
+//			}
+//			if (cibilDto.getStatus() != null) {
+//				cibilScore.setStatus(cibilDto.getStatus());
+//			}
+//			if (cibilDto.getCibilRemark() != null) {
+//				cibilScore.setCibilRemark(cibilDto.getCibilRemark());
+//			}
+//			enquiry.setCibilScore(cibilScore);
+//			enquiryRepository.save(enquiry);
+//			return "Given cibil details updated succesfully..!";
+//		}
+//		return "no cibil details/enquiry found for updating given enquiry id : " + enquiryId;
+//	}
 
 }
