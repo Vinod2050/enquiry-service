@@ -20,6 +20,7 @@ public class CibilController {
 	private static final Logger logger=LoggerFactory.getLogger(EnquiryController.class);
 	@Autowired
 	private CibilService cibilService;
+	
 
 	@PostMapping(value = "/generateCibil/{enquiryId}")
 	public ResponseEntity<String> generateCibil(@PathVariable Integer enquiryId) {
