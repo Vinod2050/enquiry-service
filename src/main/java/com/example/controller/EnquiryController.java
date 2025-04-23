@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,52 +30,75 @@ import com.example.service.EnquiryService;
 @RequestMapping("/api/enquiry")
 @Validated
 public class EnquiryController {
+	
+	private static final Logger logger=LoggerFactory.getLogger(EnquiryController.class);
 
 	@Autowired
 	private EnquiryService enquiryService;
 
-	@PostMapping(value = "/saveEnquiry")
+	@PostMapping("/enquires")
 	public ResponseEntity<String> saveEnquiry(@Valid @RequestBody EnquiryDTO dto) {
-		String savedEnquiry = enquiryService.saveEnquiry(dto);
-		return new ResponseEntity<String>(savedEnquiry, HttpStatus.CREATED);
+	    logger.info("Received request to save enquiry: ");
+
+	    String savedEnquiry = enquiryService.saveEnquiry(dto);
+	    logger.info("Enquiry saved successfully.");
+
+	    return ResponseEntity.status(HttpStatus.CREATED).body(savedEnquiry);
 	}
 
-	@GetMapping(value = "/getEnquiry/{enquiryID}")
+
+	@GetMapping(value = "/enquires/{enquiryID}")
 	public ResponseEntity<EnquiryDTO> getEnquiryById(Integer enquiryID) {
+		logger.info("fetching Enquiry with Id : "+enquiryID);
 		EnquiryDTO enquiry = enquiryService.getEnquiry(enquiryID);
 		if (enquiry != null) {
+			logger.info("Enquiry Found");
 			return new ResponseEntity<EnquiryDTO>(enquiry, HttpStatus.FOUND);
 		}
+		logger.warn("Enquiry with given ID not Found"+enquiryID);
 		return new ResponseEntity<EnquiryDTO>(HttpStatus.NOT_FOUND);
 	}
 	
-	@GetMapping(value = "/getEnquiries")
-	public List<EnquiryDTO> getEnquiries(@RequestParam(required = false) String firstName,
-			@RequestParam(required = false) String enquiryStatus, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "firstName") String sortBy) {
-		List<EnquiryDTO> list = enquiryService.getAllEnquiries(firstName, enquiryStatus, page, size, sortBy).getContent();
-		return list;
+	@GetMapping("/enquiries")
+	public ResponseEntity<List<EnquiryDTO>> getEnquiries(
+	        @RequestParam(required = false) String firstName,
+	        @RequestParam(required = false) EnquiryStatus enquiryStatus,
+	        @RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "10") int size,
+	        @RequestParam(defaultValue = "firstName,enquiryStatus") String sortBy) {
+
+		logger.info("Fetching enquiries with filters");
+	    List<EnquiryDTO> enquiryList = enquiryService
+	            .getAllEnquiries(firstName, enquiryStatus, page, size, sortBy)
+	            .getContent();
+          
+	    return ResponseEntity.ok(enquiryList);
 	}
 	
-	@GetMapping(value = "/enquiriesByStatus/{enquiryStatus}")
+	
+	@GetMapping(value = "/enquiries/{enquiryStatus}")
 	public List<Enquiry> getEnquiriesByStatus(@PathVariable EnquiryStatus enquiryStatus) {
 		return enquiryService.getEnquiriesByStatus(enquiryStatus);
 	}
 
-	@DeleteMapping(value = "/deleteEnquiry/{enquiryId}")
+	@DeleteMapping(value = "/enquiries/{enquiryId}")
 	public ResponseEntity<String> deleteById(@PathVariable Integer enquiryId) {
+		logger.warn("Deleting  enquiry with Id : "+enquiryId);
+		
 		String msg = enquiryService.deleteEnquriy(enquiryId);
 		return new ResponseEntity<String>(msg, HttpStatus.ACCEPTED);
 	}
 
-	@PutMapping(value = "/updateEnquiry/{enquiryId}")
+	@PutMapping(value = "/enquiries{enquiryId}")
 	public ResponseEntity<String> putEnquiry(@PathVariable Integer enquiryId, @RequestBody EnquiryDTO enquiryDTO) {
+		logger.info("upadate request Received");
 		String updatedEnquiry = enquiryService.putEnquiry(enquiryId, enquiryDTO);
 		return new ResponseEntity<String>(updatedEnquiry, HttpStatus.OK);
 	}
 	
-	@PatchMapping(value = "/updateEnquiryStatus/{enquiryId}/{enquiryStatus}")
+	@PatchMapping(value = "/enquiries/{enquiryId}/{enquiryStatus}")
 	public ResponseEntity<String> updateEnquiryStatus(@PathVariable Integer enquiryId, @PathVariable EnquiryStatus enquiryStatus) {
+		logger.info("request Received for Enquiry Status");
 		String result = enquiryService.saveStatus(enquiryId, enquiryStatus);
 		return new ResponseEntity<String>(result, HttpStatus.CREATED);
 	}

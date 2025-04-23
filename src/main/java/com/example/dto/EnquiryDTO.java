@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.example.enums.EnquiryStatus;
+
 import lombok.Data;
 
 @Data
@@ -34,5 +36,9 @@ public class EnquiryDTO {
 	@NotBlank(message = "PAN card number is required")
 	@Pattern(regexp = "[A-Z]{5}[0-9]{4}[A-Z]{1}", message = "Invalid PAN card format")
 	private String panCardNumber;
+	
+	private EnquiryStatus enquiryStatus;
+	
+	
 
 }

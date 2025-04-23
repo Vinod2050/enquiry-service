@@ -12,18 +12,17 @@ public interface EnquiryService {
 
 	String saveEnquiry(EnquiryDTO dto);
 
-	String saveStatus(Integer enquiryId, EnquiryStatus enquiryStatus);
+    String saveStatus(Integer enquiryId, EnquiryStatus enquiryStatus);
 
-	String deleteEnquriy(Integer enquiryId);
+    String deleteEnquriy(Integer enquiryId);
 
-	EnquiryDTO getEnquiry(Integer enquiryID);
+    EnquiryDTO getEnquiry(Integer enquiryId);
 
-	Page<EnquiryDTO> getAllEnquiries( String firstName,String enquiryStatus,int page, int size, String sortAttribute);
+    Page<EnquiryDTO> getAllEnquiries(String firstName, EnquiryStatus enquiryStatus, int page, int size, String sortAttribute);
 
-	List<Enquiry> getEnquiriesByStatus(EnquiryStatus enquiryStatus);
+    List<Enquiry> getEnquiriesByStatus(EnquiryStatus enquiryStatus);
 
-	String putEnquiry(Integer enquiryId, EnquiryDTO enquiryDTO);
-
+    String putEnquiry(Integer enquiryId, EnquiryDTO enquiryDTO);
 	
 
 }

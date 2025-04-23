@@ -24,14 +24,15 @@ public class Cibil {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer cibilId;
 	private Integer cibilScore;
-	private LocalDate cibilScoreDateTime;
 	private String status;
 	private String cibilRemark;
+	private Integer enquiryId;
 	@CreationTimestamp
 	@Column(updatable = false)
 	private LocalDate creationDate;
-	@UpdateTimestamp
-	@Column(insertable = false)
-	private LocalDate updationDate;
+
+
+
+
 
 }

@@ -1,9 +1,12 @@
 package com.example.serviceImpl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,16 +14,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.controller.EnquiryController;
 import com.example.dto.EnquiryDTO;
-import com.example.entity.Cibil;
+
 import com.example.entity.Enquiry;
 import com.example.enums.EnquiryStatus;
+import com.example.exception.EnquiryIdNotFound;
 import com.example.repository.CibilRepository;
 import com.example.repository.EnquiryRepository;
 import com.example.service.EnquiryService;
 
 @Service
 public class EnquiryServiceImpl implements EnquiryService {
+	
+
 
 	@Autowired
 	private EnquiryRepository enquiryRepository;
@@ -36,10 +43,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 		Enquiry enquiry = modelMapper.map(dto, Enquiry.class);
 		enquiry.setIsDeleted(false);
 		enquiry.setMobileNo(Long.parseLong(dto.getMobileNo()));
-		Cibil cibil = new Cibil();
 		enquiry.setEnquiryStatus(EnquiryStatus.REGISTERED);
-		enquiry.setCibilScore(cibil);
-		cibilRepository.save(cibil);
 		enquiryRepository.save(enquiry);
 		return "Enquiry Submited Successfully";
 	}
@@ -49,7 +53,11 @@ public class EnquiryServiceImpl implements EnquiryService {
 		Optional<Enquiry> opt = enquiryRepository.findById(enquiryId);
 		if (opt.isPresent()) {
 			Enquiry enquiry = opt.get();
+			
 			enquiry.setEnquiryStatus(enquiryStatus);
+			
+			
+			
 			enquiryRepository.save(enquiry);
 			return "Enquiry status updated successfully.";
 		} else {
@@ -59,13 +67,11 @@ public class EnquiryServiceImpl implements EnquiryService {
 
 	@Override
 	public EnquiryDTO getEnquiry(Integer enquiryID) {
-		if (enquiryRepository.existsById(enquiryID)) {
-			Enquiry enquiry = enquiryRepository.findById(enquiryID).get();
-			EnquiryDTO enquirydto = modelMapper.map(enquiry, EnquiryDTO.class);
-			return enquirydto;
-		}
-		return null;
+	    Enquiry enquiry = enquiryRepository.findById(enquiryID)
+	            .orElseThrow(() -> new EnquiryIdNotFound("Enquiry not found for ID: " + enquiryID));
+	    return modelMapper.map(enquiry, EnquiryDTO.class);
 	}
+
 
 	@Override
 	public String deleteEnquriy(Integer enquiryId) {
@@ -80,39 +86,45 @@ public class EnquiryServiceImpl implements EnquiryService {
 	}
 
 	@Override
-	public Page<EnquiryDTO> getAllEnquiries(String firstName,String enquiryStatus,int page, int size, String sortBy) {
-		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy != null ? sortBy : "firstName","enquiryStatus"));
+	public Page<EnquiryDTO> getAllEnquiries(String firstName, EnquiryStatus enquiryStatus, int page, int size, String sortBy) {
+	    // Handle multiple sort fields, e.g., "firstName,enquiryStatus"
+	    String[] sortFields = (sortBy != null && !sortBy.isBlank()) ? sortBy.split(",") : new String[]{"firstName"};
+	    Sort sort = Sort.by(sortFields);
+	    Pageable pageable = PageRequest.of(page, size, sort);
 
-		if (firstName != null && enquiryStatus != null) {
-			return enquiryRepository.findByFirstNameAndEmail(firstName, enquiryStatus, pageable)
-					.map(entity -> modelMapper.map(entity, EnquiryDTO.class));
-		} else if (firstName != null) {
-			return enquiryRepository.findByFirstName(firstName, pageable)
-					.map(entity -> modelMapper.map(entity, EnquiryDTO.class));
-		} else if (enquiryStatus != null) {
-			return enquiryRepository.findByEmail(enquiryStatus, pageable)
-					.map(entity -> modelMapper.map(entity, EnquiryDTO.class));
-		} else {
-			return enquiryRepository.findAll(pageable).map(entity -> modelMapper.map(entity, EnquiryDTO.class));
-		}
+	    Page<Enquiry> enquiryPage;
+
+	    if (firstName != null && enquiryStatus != null) {
+	        enquiryPage = enquiryRepository.findByFirstNameAndEnquiryStatus(firstName, enquiryStatus, pageable);
+	    } else if (firstName != null) {
+	        enquiryPage = enquiryRepository.findByFirstName(firstName, pageable);
+	    } else if (enquiryStatus != null) {
+	        enquiryPage = enquiryRepository.findByEnquiryStatus(enquiryStatus, pageable);
+	    } else {
+	        enquiryPage = enquiryRepository.findAll(pageable);
+	    }
+
+	    return enquiryPage.map(enquiry -> modelMapper.map(enquiry, EnquiryDTO.class));
 	}
+
 
 	@Override
 	public List<Enquiry> getEnquiriesByStatus(EnquiryStatus enquiryStatus) {
 		return enquiryRepository.findAllByEnquiryStatus(enquiryStatus);
 	}
-
 	@Override
 	public String putEnquiry(Integer enquiryId, EnquiryDTO enquiryDTO) {
-		if (enquiryRepository.existsById(enquiryId)) {
-			Enquiry getEnquiry = enquiryRepository.findById(enquiryId).get();
-			Enquiry updatedEnquiry = modelMapper.map(enquiryDTO, Enquiry.class);
-			updatedEnquiry.setEnquiryId(getEnquiry.getEnquiryId());
-			enquiryRepository.save(updatedEnquiry);
-			return "Enquiry details is updated...";
-		}
-		return "No enquiry found for equriry id : " + enquiryId;
+	    Enquiry existingEnquiry = enquiryRepository.findById(enquiryId)
+	            .orElseThrow(() -> new EnquiryIdNotFound("Enquiry not found for ID: " + enquiryId));
+	    
+	    Enquiry updatedEnquiry = modelMapper.map(enquiryDTO, Enquiry.class);
+	    updatedEnquiry.setEnquiryId(existingEnquiry.getEnquiryId());
+	    
+	    enquiryRepository.save(updatedEnquiry);
+	    
+	    return "Enquiry details updated successfully.";
 	}
+
 
 	
 
