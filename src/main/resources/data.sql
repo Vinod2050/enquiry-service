@@ -1,5 +1,5 @@
 INSERT INTO enquiry (
-  first_name, last_name, age, email, mobile_no, pan_card_number, is_deleted, creation_date, updation_date, enquiry_status, cibil_score_cibil_id
+  first_name, last_name, age, email, mobile_no, pan_card_number, is_deleted, creation_date, updation_date, enquiry_status, cibil_Details_cibil_id
 ) VALUES 
   ('Amit', 'Verma', 30, 'amit.verma@gmail.com', 9876543210, 'ABCDE1234F', FALSE, '2025-04-17', '2025-04-17', 'APPROVED', NULL),
   ('Sneha', 'Patel', 27, 'sneha.patel@gmail.com', 9123456789, 'PQRSX5678Z', FALSE, '2025-04-17', '2025-04-17', 'APPROVED', NULL),

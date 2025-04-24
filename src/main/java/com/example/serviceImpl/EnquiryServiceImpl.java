@@ -44,7 +44,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 	}
 
 	@Override
-	public String saveStatus(Integer enquiryId, EnquiryStatus enquiryStatus) {
+	public String updateStatus(Integer enquiryId, EnquiryStatus enquiryStatus) {
 		Optional<Enquiry> opt = enquiryRepository.findById(enquiryId);
 		if (opt.isPresent()) {
 			Enquiry enquiry = opt.get();

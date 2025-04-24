@@ -53,10 +53,10 @@ public class EnquiryController {
 		EnquiryDTO enquiry = enquiryService.getEnquiry(enquiryID);
 		if (enquiry != null) {
 			logger.info("Enquiry Found");
-			return new ResponseEntity<EnquiryDTO>(enquiry, HttpStatus.FOUND);
+			return new ResponseEntity<EnquiryDTO>(enquiry, HttpStatus.OK);
 		}
 		logger.warn("Enquiry with given ID not Found"+enquiryID);
-		return new ResponseEntity<EnquiryDTO>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<EnquiryDTO>(HttpStatus.NO_CONTENT);
 	}
 	
 	@GetMapping("/enquiries")
@@ -65,7 +65,7 @@ public class EnquiryController {
 	        @RequestParam(required = false) EnquiryStatus enquiryStatus,
 	        @RequestParam(defaultValue = "0") int page,
 	        @RequestParam(defaultValue = "10") int size,
-	        @RequestParam(defaultValue = "firstName,enquiryStatus") String sortBy) {
+	        @RequestParam(required = false,defaultValue = "firstName,enquiryStatus") String sortBy) {
 
 		logger.info("Fetching enquiries with filters");
 	    List<EnquiryDTO> enquiryList = enquiryService
@@ -99,7 +99,7 @@ public class EnquiryController {
 	@PatchMapping(value = "/enquiries/{enquiryId}/{enquiryStatus}")
 	public ResponseEntity<String> updateEnquiryStatus(@PathVariable Integer enquiryId, @PathVariable EnquiryStatus enquiryStatus) {
 		logger.info("request Received for Enquiry Status");
-		String result = enquiryService.saveStatus(enquiryId, enquiryStatus);
+		String result = enquiryService.updateStatus(enquiryId, enquiryStatus);
 		return new ResponseEntity<String>(result, HttpStatus.CREATED);
 	}
 }

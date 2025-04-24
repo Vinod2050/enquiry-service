@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.entity.Cibil;
 import com.example.entity.Enquiry;
+import com.example.enums.EnquiryStatus;
 import com.example.repository.CibilRepository;
 import com.example.repository.EnquiryRepository;
 import com.example.service.CibilService;
@@ -34,7 +35,15 @@ public class CibilServiceImpl implements CibilService {
 
 			cibilRepository.save(generatedCibilDetails);
 
-			enquiry.setCibilScore(generatedCibilDetails);
+			enquiry.setCibilDetails(generatedCibilDetails);
+			
+			if(generatedCibilDetails.getCibilScore()>=650) {
+				
+				enquiry.setEnquiryStatus(EnquiryStatus.APPROVED);
+			}else if(generatedCibilDetails.getCibilScore()<=400){
+				
+				enquiry.setEnquiryStatus(EnquiryStatus.REJECTED);
+			}
 
 			enquiryRepository.save(enquiry);
 

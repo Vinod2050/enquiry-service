@@ -44,6 +44,6 @@ public class Enquiry {
 	@Column(insertable = false)
 	private LocalDate updationDate;
 	@OneToOne
-	private Cibil cibilScore;
+	private Cibil cibilDetails;
 
 }

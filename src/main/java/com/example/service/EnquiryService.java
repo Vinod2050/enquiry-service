@@ -12,8 +12,6 @@ public interface EnquiryService {
 
 	String saveEnquiry(EnquiryDTO dto);
 
-    String saveStatus(Integer enquiryId, EnquiryStatus enquiryStatus);
-
     String deleteEnquriy(Integer enquiryId);
 
     EnquiryDTO getEnquiry(Integer enquiryId);
@@ -23,6 +21,8 @@ public interface EnquiryService {
     List<Enquiry> getEnquiriesByStatus(EnquiryStatus enquiryStatus);
 
     String putEnquiry(Integer enquiryId, EnquiryDTO enquiryDTO);
+
+	String updateStatus(Integer enquiryId, EnquiryStatus enquiryStatus);
 	
 
 }
